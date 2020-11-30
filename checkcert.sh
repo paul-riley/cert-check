@@ -19,6 +19,7 @@ peMaster="prileydevmaster0.classroom.puppet.com:8140"
 
 currentDateSec=$(date +%s)
 
+
 expiringCertArray=()
 
 for cert in "${localCertArray[@]}"
@@ -29,13 +30,13 @@ do
   echo "Cert Date is" $certDate
   certDateSec=$(date -d "${certDate}" +%s)
   echo "Cert Date seconds are" $certDateSec
-  dateDiffDays=$(( ($certDateSec - $currentDateSec) / 86400 ))
+  daysToExpiration=$(( ($certDateSec - $currentDateSec) / 86400 ))
   echo "Difference in Days is" $certDateSec
 
-  if (($maximumCertAge < $dateDiffDays))
+  if (($daysToExpiration < $maximumCertAge))
   then
     expiringCertArray+=("$cert:$dateDiffDays")
-    echo "Cert:" $cert "is expiring within" $maximumCertAge "days"
+    echo "ERROR! Cert:" $cert "is expiring within" $maximumCertAge "days"
   else
     echo "Cert:" $cert "is NOT expiring within" $maximumCertAge "days"
   fi
@@ -50,13 +51,13 @@ do
 
   certDate=$(cat tmp-$cert.pem |openssl x509 -noout -enddate |sed 's/notAfter=//')
   certDateSec=$(date -d "${certDate}" +%s)
-  dateDiffDays=$(( ($certDateSec - $currentDateSec) / 86400))
+  daysToExpiration=$(( ($certDateSec - $currentDateSec) / 86400 ))
   #rm tmp-$cert.pem
 
-  if (($maximumCertAge > $dateDiffDays))
+  if (($daysToExpiration < $maximumCertAge))
   then
     expiringCertArray+=("$cert:$dateDiffDays")
-    echo "Cert:" $cert "is expiring within" $maximumCertAge "days"
+    echo "ERROR! Cert:" $cert "is expiring within" $maximumCertAge "days"
   else
     echo "Cert:" $cert "is NOT expiring within" $maximumCertAge "days"
   fi
