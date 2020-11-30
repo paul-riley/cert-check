@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+###################################
+#  Paul Riley paul.riley@puppet.com
+#  Checks certs locally and remotely using API calls for Puppet Ent. Master
+#  11/30/2020
+###################################
+
 ### data to be analyzed and params to change ###
 
 maximumCertAge=30
-notifyEmail="test@notanemail.com"
+
+notifyEmail=""
 
 localCertArray=( "/etc/puppetlabs/client-tools/ssl/certs/ca.pem"
             "/etc/puppetlabs/puppet/ssl/certs/ca.pem")
@@ -15,7 +22,7 @@ urlArray=(  "puppet.classroom.puppet.com"
 peMaster="prileydevmaster0.classroom.puppet.com:8140"
 
 
-### core of script ###
+### business logic in script ###
 
 currentDateSec=$(date +%s)
 
@@ -59,8 +66,8 @@ do
 
   if (($daysToExpiration < $maximumCertAge))
   then
-    expiringCertArray+=("$cert:$dateDiffDays")
-    echo "ERROR! Cert:" $cert "is expiring within" $maximumCertAge "days"
+    expiringCertArray+=("$cert: $daysToExpiration")
+    echo "ERROR! Cert:" $cert "is expiring in" $daysToExpiration "days"
   else
     echo "Cert:" $cert "is NOT expiring within" $maximumCertAge "days"
   fi
@@ -70,11 +77,22 @@ done
 if (( ${#expiringCertArray[@]} ))
 then
   echo "There are errors lets log and possibly email them."
+
+  emailText=$'The following certs exipire within 30 days. Please take action!\n\n'
+
   for expCert in ${expiringCertArray[@]}
   do
-    echo "Cert has expired for:" $expCert
+    echo "ERROR: Certifcate expires for ${expCert} days from NOW!" 1>&2
+
+    emailText+="Certifcate expires for ${expCert} days from NOW!"
+    emailText+=$'\n'
+    
   done
+  if [[! -z $notifyEmail]]
+  then
+    sendmail $notifyEmail < $emailText
+  fi
 else
-  echo "There are no errors"
+  echo "No certificate errors"
 
 fi
