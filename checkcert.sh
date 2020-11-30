@@ -42,8 +42,8 @@ do
 
   if (($daysToExpiration < $maximumCertAge))
   then
-    expiringCertArray+=("$cert:$dateDiffDays")
-    echo "ERROR! Cert:" $cert "is expiring within" $maximumCertAge "days"
+    expiringCertArray+=("$cert: $daysToExpiration")
+    echo "ERROR! Cert:" $cert "is expiring in" $daysToExpiration"days"
   else
     echo "Cert:" $cert "is NOT expiring within" $maximumCertAge "days"
   fi
@@ -82,11 +82,11 @@ then
 
   for expCert in ${expiringCertArray[@]}
   do
-    echo "ERROR: Certifcate expires for ${expCert} days from NOW!" 1>&2
+    echo "ERROR! Cert: Certifcate expires for ${expCert} days from NOW!" 1>&2
 
     emailText+="Certifcate expires for ${expCert} days from NOW!"
     emailText+=$'\n'
-    
+
   done
   if [[! -z $notifyEmail]]
   then
