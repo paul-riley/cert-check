@@ -50,9 +50,12 @@ do
   curl -k --request GET "https://$peMaster/puppet-ca/v1/certificate/$cert" --header 'Content-Type: text/plain' > tmp-$cert.pem
 
   certDate=$(cat tmp-$cert.pem |openssl x509 -noout -enddate |sed 's/notAfter=//')
+  echo "Cert Date is" $certDate
   certDateSec=$(date -d "${certDate}" +%s)
+  echo "Cert Date seconds are" $certDateSec
   daysToExpiration=$(( ($certDateSec - $currentDateSec) / 86400 ))
-  #rm tmp-$cert.pem
+  echo "Difference in Days is" $daysToExpiration
+  rm tmp-$cert.pem
 
   if (($daysToExpiration < $maximumCertAge))
   then
