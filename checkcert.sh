@@ -31,7 +31,7 @@ do
   certDateSec=$(date -d "${certDate}" +%s)
   echo "Cert Date seconds are" $certDateSec
   daysToExpiration=$(( ($certDateSec - $currentDateSec) / 86400 ))
-  echo "Difference in Days is" $certDateSec
+  echo "Difference in Days is" $daysToExpiration
 
   if (($daysToExpiration < $maximumCertAge))
   then
