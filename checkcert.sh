@@ -42,8 +42,9 @@ do
 
   if (($daysToExpiration < $maximumCertAge))
   then
-    expiringCertArray+=("$cert: $daysToExpiration")
-    echo "ERROR! Cert:" $cert "is expiring in" $daysToExpiration"days"
+    daysExpString=$(printf '%0d' $daysToExpiration)
+    expiringCertArray+=("$cert:$daysExpString")
+    echo "ERROR! Cert:" $cert "is expiring in" $daysExpString "days"
   else
     echo "Cert:" $cert "is NOT expiring within" $maximumCertAge "days"
   fi
@@ -66,8 +67,9 @@ do
 
   if (($daysToExpiration < $maximumCertAge))
   then
-    expiringCertArray+=("$cert: $daysToExpiration")
-    echo "ERROR! Cert:" $cert "is expiring in" $daysToExpiration "days"
+    daysExpString=$(printf '%0d' $daysToExpiration)
+    expiringCertArray+=("$cert:$daysExpString")
+    echo "ERROR! Cert:" $cert "is expiring in" $daysExpString "days"
   else
     echo "Cert:" $cert "is NOT expiring within" $maximumCertAge "days"
   fi
@@ -88,7 +90,7 @@ then
     emailText+=$'\n'
 
   done
-  if [[! -z $notifyEmail]]
+  if [[ ! -z "$notifyEmail" ]]
   then
     sendmail $notifyEmail < $emailText
   fi
