@@ -84,7 +84,7 @@ then
 
   for expCert in ${expiringCertArray[@]}
   do
-    echo "ERROR! Cert: Certifcate expires for ${expCert} days from NOW!" 1>&2
+    logger "ERROR! Cert: Certficate expires for ${expCert} days from NOW!"
 
     emailText+="Certifcate expires for ${expCert} days from NOW!"
     emailText+=$'\n'
@@ -92,7 +92,9 @@ then
   done
   if [[ ! -z "$notifyEmail" ]]
   then
-    sendmail $notifyEmail < $emailText
+    echo ${emailText} > tmp-email.txt
+    sendmail $notifyEmail < tmp-email.txt
+    rm tmp-email.txt
   fi
 else
   echo "No certificate errors"
