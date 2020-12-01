@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 ###################################
-#  Paul Riley paul.riley@puppet.com
-#  Checks certs locally and remotely using API calls for Puppet Ent. Master
+#  Paul Riley
+#  paul.riley@puppet.com
+#
+#  Checks certs locally and remotely using API calls for Puppet Enterprise Master
 #  11/30/2020
 ###################################
 
@@ -21,12 +23,9 @@ urlArray=(  "puppet.classroom.puppet.com"
 
 peMaster="prileydevmaster0.classroom.puppet.com:8140"
 
-
 ### business logic in script ###
 
 currentDateSec=$(date +%s)
-
-
 expiringCertArray=()
 
 for cert in "${localCertArray[@]}"
@@ -79,9 +78,7 @@ done
 if (( ${#expiringCertArray[@]} ))
 then
   echo "There are errors lets log and possibly email them."
-
   emailText=$'The following certs exipire within 30 days. Please take action!\n\n'
-
   for expCert in ${expiringCertArray[@]}
   do
     logger "ERROR! Cert: Certficate expires for ${expCert} days from NOW!"
@@ -98,5 +95,4 @@ then
   fi
 else
   echo "No certificate errors"
-
 fi
