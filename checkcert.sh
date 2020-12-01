@@ -81,7 +81,7 @@ then
   emailText=$'The following certs exipire within 30 days. Please take action!\n\n'
   for expCert in ${expiringCertArray[@]}
   do
-    logger "ERROR! Cert: Certficate expires for ${expCert} days from NOW!"
+    logger "ERROR! Puppet Certficate expires for ${expCert} days from NOW!"
 
     emailText+="Certifcate expires for ${expCert} days from NOW!"
     emailText+=$'\n'
