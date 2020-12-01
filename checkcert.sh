@@ -13,8 +13,6 @@
 
 maximumCertAge=30
 
-notifyEmail=""
-
 localCertArray=( "/etc/puppetlabs/client-tools/ssl/certs/ca.pem"
             "/etc/puppetlabs/puppet/ssl/certs/ca.pem")
 
@@ -23,6 +21,9 @@ urlArray=(  "puppet.classroom.puppet.com"
             "prileydevwin0.classroom.puppet.com")
 
 peMaster="prileydevmaster0.classroom.puppet.com:8140"
+
+#If notifyEmail is empty/null string, email will not be sent.
+notifyEmail=""
 
 ### business logic in script ###
 
