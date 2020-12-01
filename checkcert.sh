@@ -3,9 +3,10 @@
 ###################################
 #  Paul Riley
 #  paul.riley@puppet.com
+#  11/30/2020
 #
 #  Checks certs locally and remotely using API calls for Puppet Enterprise Master
-#  11/30/2020
+#  Requires Bash 3.x and newer, sendmail(optional), and curl
 ###################################
 
 ### data to be analyzed and params to change ###
